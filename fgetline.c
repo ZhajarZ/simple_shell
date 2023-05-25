@@ -1,109 +1,106 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
 #include "shell.h"
 
 /**
- * myFunc - read input from standard input by user
+ * _getline - read input from standard input by user
  * Return: the input on a buffer
  */
-char *myFunc()
+char *_getline()
 {
-	int index, rd, bufferSize = BUFSIZE;
-	char character = 0, *myBuffer, *myBuf;
+	int i, rd, buffsize = BUFSIZ;
+	char c = 0, *buffer, *buf;
 
-	myBuffer = malloc(bufferSize);
-	if (myBuffer == NULL)
+	buffer = malloc(buffsize);
+	if (buffer == NULL)
 	{
-	free(myBuffer);
-	return (NULL);
+		free(buffer);
+		return (NULL);
 	}
-       	for (index = 0; character != EOF && character != '\n'; index++)
+	for (i = 0; c != EOF && c != '\n'; i++)
 	{
-        fflush(stdin);
-        rd = read(STDIN_FILENO, &character, 1);
-        if (rd == 0)
-        {
-            free(myBuffer);
-            exit(EXIT_SUCCESS);
-        }
-        myBuffer[index] = character;
-        if (myBuffer[0] == '\n')
-            return (myEnter(myBuffer));
-        if (index >= bufferSize)
-        {
-            myBuffer = realloc(myBuffer, (bufferSize + 2));
-            if (myBuffer == NULL)
-            {
-                free(myBuffer);
-                return (NULL);
-            }
-        }
-    }
-	myBuffer[index] = '\0';
-	myBuf = mySpace(myBuffer);
-	free(myBuffer);
-	myHashtagHandler(myBuf);
-	return (myBuf);
+		fflush(stdin);
+		rd = read(STDIN_FILENO, &c, 1);
+		if (rd == 0)
+		{
+			free(buffer);
+			exit(EXIT_SUCCESS);
+		}
+		buffer[i] = c;
+		if (buffer[0] == '\n')
+			return (enter(buffer));
+		if (i >= buffsize)
+		{
+			buffer = realloc(buffer, (buffsize + 2));
+			if (buffer == NULL)
+			{
+				free(buffer);
+				return (NULL);
+			}
+		}
+	}
+	buffer[i] = '\0';
+	buf = space(buffer);
+	free(buffer);
+	hashtag_handler(buf);
+	return (buf);
 }
 
 /**
- * myEnter - Handles newline character input
- * @myString: String to be handled
+ * enter - Handles newline character input
+ * @string: String to be handled
  * Return: Empty string
  */
-char *myEnter(char *myString)
+char *enter(char *string)
 {
-    free(myString);
-    return ("\0");
+	free(string);
+	return ("\0");
 }
 
 /**
- * mySpace - Modifies the input string to remove preceeding whitespaces
+ * space - Modifies the input string to remove preceeding whitespaces
  * @str: Input to be modifies
  * Return: Returns the modified string
  */
-char *mySpace(char *str)
+char *space(char *str)
 {
-    int i, j = 0;
-    char *myBuff;
+	int i, j = 0;
+	char *buff;
 
-    myBuff = malloc(sizeof(char) * (strlen(str) + 1));
-    if (myBuff == NULL)
-    {
-        free(myBuff);
-        return NULL;
-    }
-    for (i = 0; str[i] == ' '; i++)
-        ;
-    for (; str[i + 1] != '\0'; i++)
-    {
-        myBuff[j] = str[i];
-        j++;
-    }
-    myBuff[j] = '\0';
-    if (myBuff[0] == '\0' || myBuff[0] == '#')
-    {
-        free(myBuff);
-        return "\0";
-    }
-    return myBuff;
+	buff = malloc(sizeof(char) * (strlen(str) + 1));
+	if (buff == NULL)
+	{
+		free(buff);
+		return (NULL);
+	}
+	for (i = 0; str[i] == ' '; i++)
+		;
+	for (; str[i + 1] != '\0'; i++)
+	{
+		buff[j] = str[i];
+		j++;
+	}
+	buff[j] = '\0';
+	if (buff[0] == '\0' || buff[0] == '#')
+	{
+		free(buff);
+		return ("\0");
+	}
+	return (buff);
 }
 
 /**
- * myHashtagHandler - function that removes everything after '#'
- * @myBuff: input buffer
+ * hashtag_handler - function that removes everything after '#'
+ * @buff: input buffer
  * Return: nothing
  */
-void myHashtagHandler(char *myBuff)
+void hashtag_handler(char *buff)
 {
 	int i;
 
-	for (i = 0; myBuff[i] != '\0'; i++)
+	for (i = 0; buff[i] != '\0'; i++)
 	{
-	if (myBuff[i] == '#' && myBuff[i - 1] == ' ' && myBuff[i + 1] == ' ')
-	{
-		myBuff[i] = '\0';
-	}
+		if (buff[i] == '#' && buff[i - 1] == ' ' && buff[i + 1] == ' ')
+		{
+			buff[i] = '\0';
+		}
 	}
 }

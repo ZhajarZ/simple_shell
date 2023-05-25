@@ -10,10 +10,17 @@
 #define CONVERT_LOWERCASE	1
 #define CONVERT_UNSIGNED	2
 
-#define BUFSIZE 1024
-char *myFunc();
-char *myEnter(char *myString);
-char *mySpace(char *str);
-void myHashtagHandler(char *myBuff);
+
+char *_getline();
+char *space(char *str);
+char *enter(char *string);
+void hashtag_handler(char *buff);
+void prompt(void);
+unsigned int check_delim(char c, const char *str);
+char *_strtok(char *str, const char *delim);
+int history(char *input);
+char **separator(char *input);
+
+
 
 #endif
